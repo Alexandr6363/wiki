@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
@@ -34,7 +36,12 @@ def add_page(request):
 
 
 def random_page(request):
-    return render(request, "encyclopedia/random_page.html")
+    list_of_page = util.list_entries()
+    page = random.choice(list_of_page)
+    content = util.get_entry(page)
+    return render(request, "encyclopedia/random_page.html", {
+        "content": content,
+    })
 
 
 def get_page(request, title):
