@@ -18,11 +18,46 @@ class SearchPageForm(forms.Form):
 
 
 def index(request):
+    if request.method == "POST":
+        form_search = SearchPageForm(request.POST)
+        if form_search.is_valid():
+            list_of_title = util.list_entries()
+            title = form_search.cleaned_data["search_title"]
+            if title in list_of_title:
+                content = util.get_entry(title)
+                return render(request, "encyclopedia/get_page.html", {
+                    "content": content,
+                    "form_search": SearchPageForm(),
+                })
+        else:
+            return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(),
+                "form_search": SearchPageForm()
+            })
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
-        "form_search": SearchPageForm(),
+        "form_search": SearchPageForm()
     })
 
+
+# def search_page(request):
+#     if request.method == "POST":
+#         form_search = SearchPageForm(request.POST)
+#         print(form_search)
+#         if form_search.is_valid():
+#             list_of_title = util.list_entries()
+#             print(list_of_title)
+#             print(form_search.cleaned_data["search_title"])
+#             title = form_search.cleaned_data["search_title"]
+#             if title in list_of_title:
+#                 return HttpResponseRedirect(reverse("encyclopedia/get_page.html"), args=title)
+#         else:
+#             return render(request, "encyclopedia/index.html", {
+#                 "form_search": SearchPageForm()
+#             })
+#     return render(request, "encyclopedia/index.html", {
+#         "form_search": SearchPageForm()
+#     })
 
 def add_page(request):
     if request.method == "POST":
@@ -39,26 +74,6 @@ def add_page(request):
     return render(request, "encyclopedia/add_page.html", {
         "form": NewPageForm(),
         "form_search": SearchPageForm(),
-    })
-
-
-def search_page(request):
-    if request.method == "POST":
-        form_search = SearchPageForm(request.POST)
-        print(form_search)
-        if form_search.is_valid():
-            list_of_title = util.list_entries()
-            print(list_of_title)
-            print(form_search.cleaned_data["search_title"])
-            title = form_search.cleaned_data["search_title"]
-            if title in list_of_title:
-                return HttpResponseRedirect(reverse("encyclopedia/get_page.html"), args=title)
-        else:
-            return render(request, "encyclopedia/index.html", {
-                "form_search": SearchPageForm()
-            })
-    return render(request, "encyclopedia/index.html", {
-        "form_search": SearchPageForm()
     })
 
 
