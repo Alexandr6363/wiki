@@ -21,12 +21,6 @@ def index(request):
         form_search = SearchPageForm(request.POST)
         if form_search.is_valid():
             title = form_search.cleaned_data["search_title"]
-            # if title in list_of_title:
-            #     content = util.get_entry(title)
-            #     return render(request, "encyclopedia/get_page.html", {
-            #         "content": content,
-            #         "form_search": SearchPageForm(),
-            #     })
             entries = util.search_entries(title)
             return render(request, "encyclopedia/index.html", {
                 "entries": entries,
