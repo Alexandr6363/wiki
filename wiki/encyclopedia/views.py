@@ -1,5 +1,4 @@
 import random
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
@@ -21,14 +20,18 @@ def index(request):
     if request.method == "POST":
         form_search = SearchPageForm(request.POST)
         if form_search.is_valid():
-            list_of_title = util.list_entries()
             title = form_search.cleaned_data["search_title"]
-            if title in list_of_title:
-                content = util.get_entry(title)
-                return render(request, "encyclopedia/get_page.html", {
-                    "content": content,
-                    "form_search": SearchPageForm(),
-                })
+            # if title in list_of_title:
+            #     content = util.get_entry(title)
+            #     return render(request, "encyclopedia/get_page.html", {
+            #         "content": content,
+            #         "form_search": SearchPageForm(),
+            #     })
+            entries = util.search_entries(title)
+            return render(request, "encyclopedia/index.html", {
+                "entries": entries,
+                "form_search": SearchPageForm()
+            })
         else:
             return render(request, "encyclopedia/index.html", {
                 "entries": util.list_entries(),

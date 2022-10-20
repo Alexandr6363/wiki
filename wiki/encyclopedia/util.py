@@ -35,3 +35,13 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def search_entries(title):
+    _, filenames = default_storage.listdir("entries")
+    list_of_titles = list(sorted(re.sub(r"\.md$", "", filename) for filename in filenames if filename.endswith(".md")))
+    list_of_result = []
+    for item in list_of_titles:
+        if title.upper() in item.upper():
+            list_of_result.append(item)
+    return list_of_result
