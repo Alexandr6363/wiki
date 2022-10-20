@@ -37,5 +37,8 @@ def random_page(request):
     return render(request, "encyclopedia/random_page.html")
 
 
-def get_page(request):
-    return render(request, "encyclopedia/get_page.html",)
+def get_page(request, title):
+    content = util.get_entry(title)
+    return render(request, "encyclopedia/get_page.html", {
+        "content": content,
+    })
